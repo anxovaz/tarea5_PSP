@@ -15,17 +15,17 @@ public class Interfaz {
             sc.useDelimiter("\n"); //por defecto es un epacio en vez de un Enter o salto de línea
 
             System.out.println("Introduce un número o escribe 'Salir': ");
-            String str1 = sc.next();
-            if (str1.compareTo("Salir") == 0) {
+            String teclado = sc.next();
+            if (teclado.compareTo("Salir") == 0) {
                 break; //Sale del bucle y finaliza el programa
             }
 
             //Compruebo si es numérico
-            if (str1.length() == 1) {
+            if (teclado.length() == 1) {
                 String[] numeros = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
                 boolean esNumero = false;
                 for (int i = 0; i < numeros.length; i++) {
-                    if (numeros[i].compareTo(str1) == 0) {
+                    if (numeros[i].compareTo(teclado) == 0) {
                         esNumero = true;
                         break;
                     }
