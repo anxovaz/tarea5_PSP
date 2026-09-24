@@ -9,33 +9,30 @@ import java.util.Scanner;
  */
 public class Interfaz {
     public static void main(String[] args) {
+        //Declaración escanner
+        Scanner sc = new Scanner(System.in);
+        sc.useDelimiter("\n"); //por defecto es un epacio en vez de un Enter o salto de línea
         while (true) {
-            //Declaración escanner
-            Scanner sc = new Scanner(System.in);
-            sc.useDelimiter("\n"); //por defecto es un epacio en vez de un Enter o salto de línea
-
             System.out.println("Introduce un número o escribe 'Salir': ");
             String teclado = sc.next();
+            boolean esNumero = true;
             if (teclado.compareTo("Salir") == 0) {
                 break; //Sale del bucle y finaliza el programa
             }
 
-            //Compruebo si es numérico
-            if (teclado.length() == 1) {
-                String[] numeros = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "0"};
-                boolean esNumero = false;
-                for (int i = 0; i < numeros.length; i++) {
-                    if (numeros[i].compareTo(teclado) == 0) {
-                        esNumero = true;
-                        break;
-                    }
-                }
-                if (esNumero) {
-                    break;
-                } else {
-                    System.out.println("Valor incorrecto, vuelve a intentarlo");
-                }
+            //Si se intenta convertir a integer un String que contiene letras salta una excepción
+            try {
+                Integer.parseInt(teclado);
+            }catch (Exception e) { //si salta significa que no es numérico
+                esNumero = false;
             }
+
+            if (esNumero) {
+                System.out.println(Lanzador.lanzarConFactor(Integer.parseInt(teclado)));
+            } else {
+                System.out.println("Valor incorrecto, vuelve a intentarlo");
+            }
+
 
 
         }
