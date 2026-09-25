@@ -7,7 +7,7 @@ import java.util.Scanner;
  */
 public class Interfaz {
     /**
-     * Métod0 main que contiene un selector de nivel
+     * Método main que contiene un selector de nivel
      * @param args
      */
     public static void main(String[] args) {
@@ -39,9 +39,9 @@ public class Interfaz {
     }
 
     /**
-     * Métod0 del nivel 1 que pide números hasta que el usuario introduzc "Salir"
+     * Método del nivel 1 que pide números hasta que el usuario introduzc "Salir"
      */
-    public static void nivel1(){
+    public static void nivel1() {
         while (true) {
             //Scanner
             Scanner sc = new Scanner(System.in);
@@ -61,5 +61,9 @@ public class Interfaz {
             //Vuelve al principio del for
 
         }
+    }
+
+    public static void nivel2() {
+
     }
 }

@@ -20,19 +20,10 @@ public class Lanzador {
             //declaro el proceso usando processbuilder e indico que se rranque
             Process p = new ProcessBuilder("factor", numero).start();
 
-            /*
-            Primero le da 5 segundos para ejecutarse
-            Si pasan esos 5 segundos y no ha terminado se entiende que ha fallado o se ha quedado "colgado" y le manda una señal al proceso para que termine
-            Si pasan otros 10 segundos más y no ha terminado lo finaliza "a machete"
-             */
-            boolean terminado = p.waitFor(5, TimeUnit.SECONDS);
 
-            if (!terminado) {
-                p.destroy();
-                if (!p.waitFor(10, TimeUnit.SECONDS)) {
-                    p.destroyForcibly();
-                    return p.exitValue();
-                }
+            int intTiempo = controlarTiempoProceso(p);
+            if (intTiempo != 0){
+                return intTiempo;
             }
 
             //Muestra la salida del proceso, si no hay salida se muestra la de errores
@@ -52,6 +43,30 @@ public class Lanzador {
             System.out.println("Excepción inesperada: " + e);
         }
         return -1; //devuelve -1 en caso de que caiga en alguna excepción
+    }
+
+    /**
+     * Primero le da 5 segundos para ejecutarse, si pasan esos 5 segundos y no ha terminado se entiende que ha fallado o se ha quedado "colgado" y le manda una señal al proceso para que termine, si pasan otros 10 segundos más y no ha terminado lo finaliza "a machete"
+     * @param p El proceso
+     * @return 0 o en caso de salir de haberse quedado colgado su código de salída
+     * @throws InterruptedException si por algún motivvo falla .waitfor()
+     */
+    public static int controlarTiempoProceso(Process p) {
+        try {
+            boolean terminado = p.waitFor(5, TimeUnit.SECONDS);
+
+            if (!terminado) {
+                p.destroy();
+                if (!p.waitFor(10, TimeUnit.SECONDS)) {
+                    p.destroyForcibly();
+                    return p.exitValue();
+                }
+                return p.exitValue();
+            }
+            return 0; //si no se quedó colgado
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
