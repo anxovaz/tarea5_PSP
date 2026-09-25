@@ -29,7 +29,9 @@ public class Interfaz {
             //Selector de niveles
             if(opcion == 1){
                 System.out.println("-- 1 --");
-                nivel1();
+                niveles1y2(false);
+            }else if (opcion == 2){
+                niveles1y2(true);
             }else if(opcion == 5){
                 System.out.println("Saliendo...");
                 break;
@@ -41,7 +43,7 @@ public class Interfaz {
     /**
      * Método del nivel 1 que pide números hasta que el usuario introduzc "Salir"
      */
-    public static void nivel1() {
+    public static void niveles1y2(boolean salidaFormateada) {
         while (true) {
             //Scanner
             Scanner sc = new Scanner(System.in);
@@ -55,7 +57,7 @@ public class Interfaz {
 
             //Si es número lo lanza y si no imprime un mensaje
 
-            System.out.println("Operación completada, código de salida: " + Lanzador.lanzarConFactor(teclado));
+            System.out.println("Operación completada, código de salida: " + Lanzador.lanzarConFactor(teclado, salidaFormateada));
 
 
             //Vuelve al principio del for
@@ -63,7 +65,5 @@ public class Interfaz {
         }
     }
 
-    public static void nivel2() {
 
-    }
 }

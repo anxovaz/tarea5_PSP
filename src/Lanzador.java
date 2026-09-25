@@ -12,26 +12,27 @@ import java.util.concurrent.TimeUnit;
 public class Lanzador {
     /**
      * Calcula e imprime el resultado de ejecutar el comando factor con el número pasado por parámetro y devuelve su código de salida
+     * @param salidaFormateada se la pasa a las funciones salidaProceso y salidaErroresProceso para quq agregen [OK] o [ERROR] en su respuesta
      * @param numero que usará factor int
      * @return código de salida Int
      */
-    public static int lanzarConFactor(String numero){
+    public static int lanzarConFactor(String numero, boolean salidaFormateada) {
         try {
             //declaro el proceso usando processbuilder e indico que se rranque
             Process p = new ProcessBuilder("factor", numero).start();
 
-
+            //Control del tiempo del proceso
             int intTiempo = controlarTiempoProceso(p);
             if (intTiempo != 0){
                 return intTiempo;
             }
 
             //Muestra la salida del proceso, si no hay salida se muestra la de errores
-            String salida = salidaProceso(p);
-            if (salida.compareTo("") != 0){
+            String salida = salidaProceso(p, salidaFormateada);
+            if ((salida.compareTo("") != 0) && (salida.compareTo("[OK] ") != 0)){
                 System.out.println(salida);
-            }else{
-                System.out.println(salidaErroresProceso(p));
+            }else{ //si no devolvió nada
+                System.out.println(salidaErroresProceso(p, salidaFormateada));
             }
 
             //devuelve el valor de finalización de ejecución del proceso
@@ -72,11 +73,16 @@ public class Lanzador {
     /**
      * Devuelve un String con la salida estándar del proceso
      * @param p El proceso
+     * @param salidaFormateada boolean, si es true agrega [OK] al principio del string
      * @return String con la salida
      * @throws IOException Si no se puede leer la saida
      */
-    public static String salidaProceso(Process p) throws IOException {
+    public static String salidaProceso(Process p, boolean salidaFormateada) throws IOException {
         String respuesta = "";
+        if (salidaFormateada) {
+            respuesta = respuesta + "[OK] ";
+        }
+
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
             String linea;
             while ((linea = reader.readLine()) != null) {
@@ -91,11 +97,15 @@ public class Lanzador {
     /**
      * Devuelve un String con la salida de errores del proceso
      * @param p El proceso
+     * @param salidaFormateada boolean, si es true agrega [ERROR] al principio del string
      * @return String con la salida
      * @throws IOException Si no se puede leer la saida
      */
-    public static String salidaErroresProceso(Process p) throws IOException{
+    public static String salidaErroresProceso(Process p, boolean salidaFormateada) throws IOException{
         String respuesta = "";
+        if (salidaFormateada) {
+            respuesta = respuesta + "[ERROR] ";
+        }
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
             String linea;
             while ((linea = reader.readLine()) != null) {
