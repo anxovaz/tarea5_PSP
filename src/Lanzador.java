@@ -12,13 +12,13 @@ import java.util.concurrent.TimeUnit;
 public class Lanzador {
     /**
      * Calcula e imprime el resultado de ejecutar el comando factor con el número pasado por parámetro y devuelve su código de salida
-     * @param numero int
+     * @param numero que usará factor int
      * @return código de salida Int
      */
-    public static int lanzarConFactor(int numero){
+    public static int lanzarConFactor(String numero){
         try {
             //declaro el proceso usando processbuilder e indico que se rranque
-            Process p = new ProcessBuilder("factor", String.valueOf(numero)).start();
+            Process p = new ProcessBuilder("factor", numero).start();
 
             /*
             Primero le da 5 segundos para ejecutarse
@@ -35,12 +35,12 @@ public class Lanzador {
                 }
             }
 
-            //Mostrar salida factor por pantalla
-            try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
-                String linea;
-                while ((linea = reader.readLine()) != null) {
-                    System.out.println(linea);
-                }
+            //Muestra la salida del proceso, si no hay salida se muestra la de errores
+            String salida = salidaProceso(p);
+            if (salida.compareTo("") != 0){
+                System.out.println(salida);
+            }else{
+                System.out.println(salidaErroresProceso(p));
             }
 
             //devuelve el valor de finalización de ejecución del proceso
@@ -52,5 +52,43 @@ public class Lanzador {
             System.out.println("Excepción inesperada: " + e);
         }
         return -1; //devuelve -1 en caso de que caiga en alguna excepción
+    }
+
+    /**
+     * Devuelve un String con la salida estándar del proceso
+     * @param p El proceso
+     * @return String con la salida
+     * @throws IOException Si no se puede leer la saida
+     */
+    public static String salidaProceso(Process p) throws IOException {
+        String respuesta = "";
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                respuesta = respuesta + linea;
+            }
+        }catch (IOException e){
+            throw new IOException("Error, no se puede leer la salida estándar del proceso:", e);
+        }
+        return respuesta;
+    }
+
+    /**
+     * Devuelve un String con la salida de errores del proceso
+     * @param p El proceso
+     * @return String con la salida
+     * @throws IOException Si no se puede leer la saida
+     */
+    public static String salidaErroresProceso(Process p) throws IOException{
+        String respuesta = "";
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                respuesta = respuesta + linea;
+            }
+        }catch (IOException e){
+            throw new IOException("Error, no se puede leer la salida estándar del proceso:", e);
+        }
+        return respuesta;
     }
 }
