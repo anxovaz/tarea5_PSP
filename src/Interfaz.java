@@ -23,15 +23,18 @@ public class Interfaz {
             //Si se intenta convertir a integer un String que contiene letras salta una excepción
             try {
                 Integer.parseInt(teclado);
-            }catch (Exception e) { //si salta significa que no es numérico
+            }catch (NumberFormatException e) { //si salta significa que no es numérico
                 esNumero = false;
             }
 
+            //Si es número lo lanza y si no imprime un mensaje
             if (esNumero) {
-                System.out.println(Lanzador.lanzarConFactor(Integer.parseInt(teclado)));
+                System.out.println("Código de salida" + Lanzador.lanzarConFactor(Integer.parseInt(teclado)));
             } else {
                 System.out.println("Valor incorrecto, vuelve a intentarlo");
             }
+
+            //Vuelve al principio del for
 
 
 
