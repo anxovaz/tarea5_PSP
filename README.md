@@ -234,3 +234,27 @@ public static void pedirNumeros(boolean salidaFormateada, boolean mostrarPrimo) 
     }
 ```
 
+## Tabla Nivel 1
+
+| Valor | Salida de factor | Código de salida |
+| :---: | :--------------: | :--------------: |
+| 360 |360: 2 2 2 3 3 5 | 0 |
+| 1 | 1: | 0 |
+| 17 | 17: 17 | 0 |
+| hola | factor: «hola» no es un entero positivo válido | 1 |
+| -5 | factor: opción inválida -- '5'Pruebe 'factor --help' para más información. <br/>Si se le indica el -5 entre comillas: factor: «'-5'» no es un entero positivo válido | 1 |
+
+## Capturas
+
+### Nivel 1
+
+![nivel1](./capturas/nivel1.png)
+
+### Nivel 2
+
+![nivel2](./capturas/nivel2.png)
+
+### Nivel 4
+
+![nivel4](./capturas/nivel4.png)
+
