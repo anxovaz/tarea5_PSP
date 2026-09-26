@@ -260,3 +260,11 @@ public static void pedirNumeros(boolean salidaFormateada, boolean mostrarPrimo) 
 
 ![nivel4](./capturas/nivel4.png)
 
+## Bibliografía
+
+- Oracle - ProcessBuilder y Process
+    https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/ProcessBuilder.html
+    https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/lang/Process.html
+
+- W3Schools - BufferedReader
+    https://www.w3schools.com/java/java_bufferedreader.asp
