@@ -1,6 +1,5 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.concurrent.TimeUnit;
 
@@ -78,11 +77,12 @@ public class Lanzador {
      * @throws IOException Si no se puede leer la saida
      */
     public static String salidaProceso(Process p, boolean salidaFormateada) throws IOException {
+        //Si el usuario selecciona nivel 2, salida formateada es true, por lo que le añade al principio  [OK]
         String respuesta = "";
         if (salidaFormateada) {
             respuesta = respuesta + "[OK] ";
         }
-
+        //Leer y guardar toda la salida
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
             String linea;
             while ((linea = reader.readLine()) != null) {
@@ -102,10 +102,12 @@ public class Lanzador {
      * @throws IOException Si no se puede leer la saida
      */
     public static String salidaErroresProceso(Process p, boolean salidaFormateada) throws IOException{
+        //Si el usuario selecciona nivel 2, salida formateada es true, por lo que le añade al principio  [ERROR]
         String respuesta = "";
         if (salidaFormateada) {
             respuesta = respuesta + "[ERROR] ";
         }
+        //Leer y guardar toda la salida
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
             String linea;
             while ((linea = reader.readLine()) != null) {
@@ -115,5 +117,23 @@ public class Lanzador {
             throw new IOException("Error, no se puede leer la salida estándar del proceso:", e);
         }
         return respuesta;
+    }
+
+    /**
+     * Método del nivel 4, se le pasa un número y devuelve un true si lo es, si no false
+     * @param numero Int número a comprobar si  es primo
+     * @return devuelve true o false en fuunción de si es primo o no
+     */
+    public static boolean esPrimo(int numero) {
+        //los números menores o iguales a 1 no son primos
+        if(numero <= 1) { return false; }
+
+        //bucle que recorre los numeros desde el 2 hasta el número -1, si al divir el numero con i da de resto 0, significa que no son primos
+        for(int i = 2; i<numero;i++) {
+            if(numero % i == 0){
+                return false;
+            }
+        }
+        return true;
     }
 }

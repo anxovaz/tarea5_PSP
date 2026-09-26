@@ -16,7 +16,7 @@ public class Interfaz {
         sc.useDelimiter("\n"); //por defecto es un epacio en vez de un Enter o salto de línea
         int opcion = 0;
         while(true) {
-            System.out.println("¿Qué nivel quieres usar (1,2,3,4,5(salir))? ");
+            System.out.println("¿Qué nivel quieres usar (1,2,4,5(salir))? ");
 
             //Compruebo si el usuario metió un número o no
             try{
@@ -29,21 +29,27 @@ public class Interfaz {
             //Selector de niveles
             if(opcion == 1){
                 System.out.println("-- 1 --");
-                niveles1y2(false);
-            }else if (opcion == 2){
-                niveles1y2(true);
+                pedirNumeros(false, false);
+            }else if (opcion == 2) {
+                pedirNumeros(true, false);
+            } else if (opcion == 4) {
+                pedirNumeros(false, true);
+
             }else if(opcion == 5){
                 System.out.println("Saliendo...");
                 break;
             }
 
+
         }
     }
 
     /**
-     * Método del nivel 1 que pide números hasta que el usuario introduzc "Salir"
+     * Método que pide numeros hasta que el usuario introduzca "Salir", en función de los parámetros pasados a este método formateará la salida (o no) o mostrará si es primo o no
+     * @param salidaFormateada boolean [OK] o [ERROR] al principio del resultado de factor
+     * @param mostrarPrimo boolean imprime si es primo o no
      */
-    public static void niveles1y2(boolean salidaFormateada) {
+    public static void pedirNumeros(boolean salidaFormateada, boolean mostrarPrimo) {
         while (true) {
             //Scanner
             Scanner sc = new Scanner(System.in);
@@ -55,9 +61,29 @@ public class Interfaz {
                 break; //Sale del bucle y finaliza el programa
             }
 
-            //Si es número lo lanza y si no imprime un mensaje
-
             System.out.println("Operación completada, código de salida: " + Lanzador.lanzarConFactor(teclado, salidaFormateada));
+
+            /*
+            Nivel 4
+            Compruebo si es un número primero, después se lo paso a la función esPrimo()
+             */
+            boolean esNumero = true;
+            try {
+                Integer.parseInt(teclado);
+            }catch (NumberFormatException e){
+                esNumero = false;
+            }
+
+            //Sólo entra si es un número y el usuario selecciona el nivel 4
+            if(mostrarPrimo && esNumero){
+                boolean respuesta = false;
+                respuesta = Lanzador.esPrimo(Integer.parseInt(teclado));
+                if (respuesta) {
+                    System.out.println(teclado + " es primo");
+                }else {
+                    System.out.println(teclado + " no es primo");
+                }
+            }
 
 
             //Vuelve al principio del for
