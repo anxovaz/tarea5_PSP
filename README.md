@@ -32,6 +32,8 @@ La única diferencia entre estos niveles es si la salida sale formateada (con `[
 
 Se instancia un `Process` con `factor` y el número indicado y lo arranca, después se controla el tiempo de ejecución del proceso, se muestra su salida (que depende del nivel) y se devuelve el código de salida del proceso.
 
+> Todos los métodos tienen comentarios en la parte superior, para verlos accede a src/Interfaz.java o src/Lanzador.java
+
 ```
 public static int lanzarConFactor(String numero, boolean salidaFormateada) {
         try {
