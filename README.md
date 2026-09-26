@@ -18,7 +18,7 @@
 
 ## Estructura del proyecto
 
-El proyecto está constituido por dos archivos ( y `Interfaz.java`).
+El proyecto está constituido por dos archivos ( `Lanzador` e `Interfaz.java`).
 
 - `Lanzador.java`: Contiene todos los métodos necesarios para los niveles.
 
@@ -28,9 +28,9 @@ El proyecto está constituido por dos archivos ( y `Interfaz.java`).
 
 ### Niveles 1 y 2
 
-La única diferencia entre estos niveles es si la salida sale formateada (con `[OK]` o `[ERROR]`) o no, así que para diferenciarlas simplemente con un `boolean` distingo que nivel a seleccionado el usuario (`salidaFormateada`).
+La única diferencia entre estos niveles es si la salida sale formateada (con `[OK]` o `[ERROR]`) o no, así que para diferenciarlos simplemente con un `boolean` distingo qué nivel ha seleccionado el usuario (`salidaFormateada`).
 
-El instancia un `Process` con `factor` y el número indicado y lo arranca, después se controla el tiempo de ejecución del proceso, se muestra su salida (que depende del nivel) y se devuelve el código de salida del proceso.
+Se instancia un `Process` con `factor` y el número indicado y lo arranca, después se controla el tiempo de ejecución del proceso, se muestra su salida (que depende del nivel) y se devuelve el código de salida del proceso.
 
 ```
 public static int lanzarConFactor(String numero, boolean salidaFormateada) {
@@ -104,7 +104,7 @@ public static String salidaProceso(Process p, boolean salidaFormateada) throws I
     }
 ```
 
-La función que controla el tiempo de ejecución primero espera 5 segundos y si no finaliza en ese tiempo le manda al proceso una señal para que se termine, si el proceso sigue sin reponder lo finaliza de forma "bruta".
+La función que controla el tiempo de ejecución primero espera 5 segundos y si no finaliza en ese tiempo le manda al proceso una señal para que se termine, si el proceso sigue sin responder lo finaliza de forma "bruta".
 
 ```
 public static int controlarTiempoProceso(Process p) {
@@ -189,9 +189,9 @@ public static void main(String[] args) {
 
 ### pedirNumeros()
 
-Este métofo recibe dos parámetros que vienen significando los diferentes niveles que el usuario indica en la función anterior.
+Este método recibe dos parámetros que vienen significando los diferentes niveles que el usuario indica en la función anterior.
 
-Este método pide al usuario números hasta que escriba "Salir", esos números se los pasa a `lanzarConFactor` junto a si el usuario seleccionó el nivel 2 (`salidaFormateada`), después en función de si el usuario escogió el nivel 4 o no se llama a la función `esprimo()`.
+Este método pide al usuario números hasta que escriba "Salir", esos números se los pasa a `lanzarConFactor` junto a si el usuario seleccionó el nivel 2 (`salidaFormateada`), después en función de si el usuario escogió el nivel 4 o no se llama a la función `esPrimo()`.
 
 ```
 public static void pedirNumeros(boolean salidaFormateada, boolean mostrarPrimo) {
