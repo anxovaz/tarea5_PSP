@@ -23,3 +23,129 @@ El proyecto está constituido por dos archivos ( y `Interfaz.java`).
 - `Lanzador.java`: Contiene todos los métodos necesarios para los niveles.
 
 - `Interfaz.java`: Contiene un método que sirve para seleccionar el nivel y otro que pide números que luego se le pasan a los métodos de `Lanzador.java` en función del nivel seleccionado.
+
+## Lanzador
+
+### Niveles 1 y 2
+
+La única diferencia entre estos niveles es si la salida sale formateada (con `[OK]` o `[ERROR]`) o no, así que para diferenciarlas simplemente con un `boolean` distingo que nivel a seleccionado el usuario (`salidaFormateada`).
+
+El instancia un `Process` con `factor` y el número indicado y lo arranca, después se controla el tiempo de ejecución del proceso, se muestra su salida (que depende del nivel) y se devuelve el código de salida del proceso.
+
+```
+public static int lanzarConFactor(String numero, boolean salidaFormateada) {
+        try {
+            //declaro el proceso usando processbuilder e indico que se rranque
+            Process p = new ProcessBuilder("factor", numero).start();
+
+            //Control del tiempo del proceso
+            int intTiempo = controlarTiempoProceso(p);
+            if (intTiempo != 0){
+                return intTiempo;
+            }
+
+            //Muestra la salida del proceso, si no hay salida se muestra la de errores
+            String salida = salidaProceso(p, salidaFormateada);
+            if ((salida.compareTo("") != 0) && (salida.compareTo("[OK] ") != 0)){
+                System.out.println(salida);
+            }else{ //si no devolvió nada
+                System.out.println(salidaErroresProceso(p, salidaFormateada));
+            }
+
+            //devuelve el valor de finalización de ejecución del proceso
+            return p.exitValue();
+
+        }catch (IOException e){ //processBuilder.start()
+            System.out.println("Error: " + e);
+        }catch (Exception e){ //en caso de error no esperado
+            System.out.println("Excepción inesperada: " + e);
+        }
+        return -1; //devuelve -1 en caso de que caiga en alguna excepción
+    }
+```
+
+Hay dos funciones de mostrar las salidas, una de errores y una estándar, que son las siguientes:
+
+```
+public static String salidaProceso(Process p, boolean salidaFormateada) throws IOException {
+        //Si el usuario selecciona nivel 2, salida formateada es true, por lo que le añade al principio  [OK]
+        String respuesta = "";
+        if (salidaFormateada) {
+            respuesta = respuesta + "[OK] ";
+        }
+        //Leer y guardar toda la salida
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                respuesta = respuesta + linea;
+            }
+        }catch (IOException e){
+            throw new IOException("Error, no se puede leer la salida estándar del proceso:", e);
+        }
+        return respuesta;
+    }
+
+    public static String salidaErroresProceso(Process p, boolean salidaFormateada) throws IOException{
+        //Si el usuario selecciona nivel 2, salida formateada es true, por lo que le añade al principio  [ERROR]
+        String respuesta = "";
+        if (salidaFormateada) {
+            respuesta = respuesta + "[ERROR] ";
+        }
+        //Leer y guardar toda la salida
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()))) { //al estar en el try el BufferedReader no hace falta hacerle .close(), ya lo hace al final del try
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                respuesta = respuesta + linea;
+            }
+        }catch (IOException e){
+            throw new IOException("Error, no se puede leer la salida estándar del proceso:", e);
+        }
+        return respuesta;
+    }
+```
+
+La función que controla el tiempo de ejecución primero espera 5 segundos y si no finaliza en ese tiempo le manda al proceso una señal para que se termine, si el proceso sigue sin reponder lo finaliza de forma "bruta".
+
+```
+public static int controlarTiempoProceso(Process p) {
+        try {
+            boolean terminado = p.waitFor(5, TimeUnit.SECONDS);
+
+            if (!terminado) {
+                p.destroy();
+                if (!p.waitFor(10, TimeUnit.SECONDS)) {
+                    p.destroyForcibly();
+                    return p.exitValue();
+                }
+                return p.exitValue();
+            }
+            return 0; //si no se quedó colgado
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+```
+
+### Nivel 4
+
+Para el nivel 4 utilizo la siguiente función:
+
+```
+public static boolean esPrimo(int numero) {
+        //los números menores o iguales a 1 no son primos
+        if(numero <= 1) { return false; }
+
+        //bucle que recorre los numeros desde el 2 hasta el número -1, si al divir el numero con i da de resto 0, significa que no son primos
+        for(int i = 2; i<numero;i++) {
+            if(numero % i == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+```
+
+## Interfaz
+
+
+
